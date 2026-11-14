@@ -1,0 +1,15 @@
+{
+  "name": "mes-skills-claude",
+  "metadata": { "description": "Mes skills personnelles pour Claude." },
+  "owner": { "name": "rajakumarkarthipan-ai" },
+  "plugins": [
+    {
+      "name": "securite-creation-application",
+      "description": "Sécurité pour création d'application : 27 contrôles de sécurité vérifiés dans le code, corrigés, avec rapport.",
+      "author": { "name": "rajakumarkarthipan-ai" },
+      "source": "./",
+      "category": "security",
+      "homepage": "https://github.com/rajakumarkarthipan-ai/mes-skills-claude"
+    }
+  ]
+}

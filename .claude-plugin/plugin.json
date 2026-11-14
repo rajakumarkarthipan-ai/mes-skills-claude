@@ -1,0 +1,10 @@
+{
+  "name": "securite-creation-application",
+  "version": "1.0.0",
+  "description": "Sécurité pour création d'application : 27 contrôles de sécurité vérifiés dans le code, corrigés, avec rapport.",
+  "author": { "name": "rajakumarkarthipan-ai" },
+  "homepage": "https://github.com/rajakumarkarthipan-ai/mes-skills-claude",
+  "repository": "https://github.com/rajakumarkarthipan-ai/mes-skills-claude",
+  "license": "MIT",
+  "keywords": ["securite", "owasp", "audit", "vibe-coding"]
+}

@@ -3,7 +3,7 @@ name: securite-creation-application
 description: Sécurité pour création d'application. Check-list de 28 contrôles de sécurité (authentification, secrets, base de données, HTTPS, XSS, CSRF, CORS, paiements, dépendances, historique Git, skills/plugins/MCP…) à appliquer à toute application web, mobile ou API créée ou modifiée avec l'IA. Utiliser dès qu'on crée, modifie, relit, déploie ou met en ligne une application, un site avec back-end, une API ou un formulaire, avant d'installer une skill, un plugin ou un serveur MCP, et dès que l'utilisateur parle de sécurité, de mise en production, de lancement ou d'audit. Vérifie chaque point dans le code, corrige, puis rend un rapport.
 license: MIT
 metadata:
-  version: "1.4.0"
+  version: "1.5.0"
   source: "Reel Instagram @simplif.ia du 13/11/2026, recoupé avec OWASP Top 10, OWASP ASVS, NVIDIA SkillSpector et Gitleaks"
 ---
 
@@ -85,6 +85,15 @@ Si un point ne concerne pas le projet (ex. : pas de paiement, pas d'envoi de fic
 ### G. Clôture
 27. **Audit de sécurité complet** : repasser sur les 26 points précédents après les corrections.
 28. **Tester les protections et rendre le rapport** ci-dessous.
+    - **Étape bonus, optionnelle et souvent payante : test d'attaque avec Strix** (https://github.com/usestrix/strix, open source, Apache 2.0). Des agents IA attaquent réellement l'application et prouvent chaque faille. Complémentaire de la check-list (qui vérifie le code) : Strix tente de casser l'application en fonctionnement.
+    - **Poser la question une seule fois par audit, ne jamais lancer sans accord explicite.** Expliquer d'abord en une phrase chacun :
+      - coût : il faut une **clé API d'un fournisseur d'IA**, payante à l'usage (l'abonnement Claude ne la fournit pas). Option gratuite possible avec un **modèle local** (ex. Ollama, voir https://docs.strix.ai/llm-providers/local), mais il faut un PC puissant et les résultats sont moins bons ;
+      - il faut **Docker Desktop** en marche ;
+      - le code testé est envoyé au fournisseur d'IA choisi (sauf modèle local) ;
+      - **uniquement sur ses propres applications** : attaquer un site sans autorisation écrite est un délit (art. 323-1 du Code pénal).
+    - **Si l'utilisateur refuse, ne veut pas payer, ou si Docker / la clé manquent : ne pas faire l'étape, ne pas insister.** Dans le rapport, l'indiquer « ➖ Non fait (étape bonus optionnelle) ». L'audit reste complet et valide sans elle ; ne pas la compter comme un échec.
+    - Si l'utilisateur accepte : tester en priorité une **version locale ou de test**, pas la production (sinon vérifier qu'une sauvegarde récente existe). Installation : `pipx install strix-agent` (éviter `curl … | bash`), puis `strix --target <dossier du projet ou URL de test>`. Résultats dans `strix_runs/`. Ajouter les failles confirmées au rapport avec la mention « confirmée par Strix ».
+    - Avant d'ajouter les skills de Strix à Claude (`npx skills add usestrix/strix`), appliquer le contrôle 26 (scan NVIDIA SkillSpector).
 
 ## Modèle de rapport
 
@@ -98,6 +107,7 @@ Rends toujours le rapport sous cette forme, en français simple :
 - Failles corrigées : X
 - À faire par toi : X  (actions que je ne peux pas faire seul, ex. régénérer une clé)
 - Non applicables : X
+- Étape bonus Strix : faite / non faite (optionnelle)
 
 ## Détail
 | # | Contrôle | Statut | Gravité | Preuve (fichier:ligne) | Ce que j'ai fait / ce qu'il reste à faire |
@@ -116,4 +126,5 @@ Gravité : **Critique** = exploitable tout de suite (secret exposé, route admin
 - OWASP Cheat Sheets : https://cheatsheetseries.owasp.org/
 - NVIDIA SkillSpector : https://github.com/NVIDIA/SkillSpector
 - Gitleaks : https://github.com/gitleaks/gitleaks
+- Strix (étape bonus) : https://github.com/usestrix/strix — documentation : https://docs.strix.ai
 - Guide NVIDIA « Scan agent skills before installation » : https://docs.nvidia.com/skills/scanning-agent-skills

@@ -3,7 +3,7 @@ name: securite-creation-application
 description: Sécurité pour création d'application. Check-list de 28 contrôles de sécurité (authentification, secrets, base de données, HTTPS, XSS, CSRF, CORS, paiements, dépendances, historique Git, skills/plugins/MCP…) à appliquer à toute application web, mobile ou API créée ou modifiée avec l'IA. Utiliser dès qu'on crée, modifie, relit, déploie ou met en ligne une application, un site avec back-end, une API ou un formulaire, avant d'installer une skill, un plugin ou un serveur MCP, et dès que l'utilisateur parle de sécurité, de mise en production, de lancement ou d'audit. Vérifie chaque point dans le code, corrige, puis rend un rapport.
 license: MIT
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
   source: "Reel Instagram @simplif.ia du 13/11/2026, recoupé avec OWASP Top 10, OWASP ASVS et NVIDIA SkillSpector"
 ---
 
@@ -78,6 +78,15 @@ Si un point ne concerne pas le projet (ex. : pas de paiement, pas d'envoi de fic
 ### G. Clôture
 27. **Audit de sécurité complet** : repasser sur les 26 points précédents après les corrections.
 28. **Tester les protections et rendre le rapport** ci-dessous.
+    - **Test d'attaque avancé, optionnel : Strix** (https://github.com/usestrix/strix, open source, Apache 2.0). Des agents IA attaquent réellement l'application et prouvent chaque faille trouvée. C'est complémentaire de la check-list : la check-list vérifie le code, Strix tente de casser l'application en fonctionnement.
+    - **Toujours proposer, ne jamais lancer sans l'accord explicite de l'utilisateur**, en lui expliquant d'abord :
+      - il faut **Docker Desktop** en marche et une **clé API d'un fournisseur d'IA** (payante à l'usage : chaque test a un coût) ;
+      - le code testé est envoyé à ce fournisseur d'IA ;
+      - **uniquement sur ses propres applications** : attaquer un site sans autorisation écrite est un délit (art. 323-1 du Code pénal).
+    - Tester en priorité une **version locale ou de test**, pas le site en production ; si c'est la production, vérifier qu'une sauvegarde récente existe.
+    - Installation recommandée : `pipx install strix-agent` (éviter `curl … | bash`), puis `strix --target <dossier du projet ou URL de test>`. Résultats dans `strix_runs/`.
+    - Avant d'ajouter les skills de Strix à Claude (`npx skills add usestrix/strix`), appliquer le contrôle 26 (scan NVIDIA SkillSpector).
+    - Intégrer les failles confirmées par Strix dans le rapport, avec la mention « confirmée par Strix ».
 
 ## Modèle de rapport
 
@@ -108,4 +117,5 @@ Gravité : **Critique** = exploitable tout de suite (secret exposé, route admin
 - OWASP ASVS : https://owasp.org/www-project-application-security-verification-standard/
 - OWASP Cheat Sheets : https://cheatsheetseries.owasp.org/
 - NVIDIA SkillSpector : https://github.com/NVIDIA/SkillSpector
+- Strix (tests d'intrusion par IA) : https://github.com/usestrix/strix — documentation : https://docs.strix.ai
 - Guide NVIDIA « Scan agent skills before installation » : https://docs.nvidia.com/skills/scanning-agent-skills

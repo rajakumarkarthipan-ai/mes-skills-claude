@@ -3,8 +3,8 @@ name: securite-creation-application
 description: Sécurité pour création d'application. Check-list de 28 contrôles de sécurité (authentification, secrets, base de données, HTTPS, XSS, CSRF, CORS, paiements, dépendances, historique Git, skills/plugins/MCP…) à appliquer à toute application web, mobile ou API créée ou modifiée avec l'IA. Utiliser dès qu'on crée, modifie, relit, déploie ou met en ligne une application, un site avec back-end, une API ou un formulaire, avant d'installer une skill, un plugin ou un serveur MCP, et dès que l'utilisateur parle de sécurité, de mise en production, de lancement ou d'audit. Vérifie chaque point dans le code, corrige, puis rend un rapport.
 license: MIT
 metadata:
-  version: "1.5.0"
-  source: "Reel Instagram @simplif.ia du 13/11/2026, recoupé avec OWASP Top 10, OWASP ASVS, NVIDIA SkillSpector et Gitleaks"
+  version: "1.6.0"
+  source: "Reel Instagram @simplif.ia du 13/11/2026, recoupé avec OWASP Top 10, OWASP ASVS, NVIDIA SkillSpector, Gitleaks et Semgrep"
 ---
 
 # Sécurité pour création d'application
@@ -28,6 +28,17 @@ Si un point ne concerne pas le projet (ex. : pas de paiement, pas d'envoi de fic
 3. **Demander avant** toute action risquée ou irréversible : réécrire l'historique Git, révoquer une clé, changer la base de production, supprimer des données.
 4. **Ne jamais afficher un secret** (clé, mot de passe, jeton) en clair dans la conversation ou le rapport : masque-le (`sk-...abcd`).
 5. **Tester** les protections quand c'est possible (requête sans connexion sur une route admin, formulaire avec `<script>`, trop de requêtes d'affilée…).
+
+## Premier passage automatique : Semgrep
+
+Au début de chaque audit (et après une grosse modification), lancer **Semgrep Community Edition** (https://semgrep.dev, gratuit, licence LGPL 2.1, analyse le code en local) pour repérer automatiquement les failles courantes. Il accélère la check-list mais ne la remplace pas.
+
+- Installation : `pipx install semgrep` (ou `pip install semgrep`). Sur Windows, Semgrep est en version bêta : si l'installation ou l'analyse échoue, le dire et continuer la check-list à la main.
+- Analyse : `semgrep scan --config p/default --config p/owasp-top-ten --metrics off` dans le dossier du projet.
+  - `--metrics off` : aucune statistique d'utilisation envoyée. Le code n'est jamais envoyé ; seules les règles sont téléchargées depuis le registre Semgrep.
+  - **Pas besoin de compte** : ne pas lancer `semgrep login` ni la plateforme en ligne (payante au-delà de l'offre gratuite) sans accord de l'utilisateur.
+- Pour chaque résultat : vérifier dans le code si c'est une vraie faille (il y a des faux positifs), le rattacher au contrôle concerné ci-dessous (ex. injection SQL → 11, XSS → 13, secret en dur → 6), corriger, et indiquer « détecté par Semgrep » dans le rapport.
+- Un résultat Semgrep « propre » ne prouve pas que le contrôle est OK : la logique métier (droits d'accès, prix, paiements) se vérifie à la main.
 
 ## Les 28 contrôles
 
@@ -104,6 +115,7 @@ Rends toujours le rapport sous cette forme, en français simple :
 
 ## En bref
 - Contrôles OK : X / 28
+- Analyse automatique Semgrep : faite / non faite (raison)
 - Failles corrigées : X
 - À faire par toi : X  (actions que je ne peux pas faire seul, ex. régénérer une clé)
 - Non applicables : X
@@ -126,5 +138,6 @@ Gravité : **Critique** = exploitable tout de suite (secret exposé, route admin
 - OWASP Cheat Sheets : https://cheatsheetseries.owasp.org/
 - NVIDIA SkillSpector : https://github.com/NVIDIA/SkillSpector
 - Gitleaks : https://github.com/gitleaks/gitleaks
+- Semgrep Community Edition : https://semgrep.dev/docs/getting-started/quickstart — métriques : https://semgrep.dev/docs/metrics
 - Strix (étape bonus) : https://github.com/usestrix/strix — documentation : https://docs.strix.ai
 - Guide NVIDIA « Scan agent skills before installation » : https://docs.nvidia.com/skills/scanning-agent-skills

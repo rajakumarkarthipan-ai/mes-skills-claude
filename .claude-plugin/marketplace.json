@@ -5,7 +5,7 @@
   "plugins": [
     {
       "name": "securite-creation-application",
-      "description": "Sécurité pour création d'application : 27 contrôles de sécurité vérifiés dans le code, corrigés, avec rapport.",
+      "description": "Sécurité pour création d'application : 28 contrôles de sécurité vérifiés dans le code, corrigés, avec rapport.",
       "author": { "name": "rajakumarkarthipan-ai" },
       "source": "./",
       "category": "security",

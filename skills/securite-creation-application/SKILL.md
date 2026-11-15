@@ -1,10 +1,10 @@
 ---
 name: securite-creation-application
-description: Sécurité pour création d'application. Check-list de 27 contrôles de sécurité (authentification, secrets, base de données, HTTPS, XSS, CSRF, CORS, paiements, dépendances, historique Git…) à appliquer à toute application web, mobile ou API créée ou modifiée avec l'IA. Utiliser dès qu'on crée, modifie, relit, déploie ou met en ligne une application, un site avec back-end, une API ou un formulaire, et dès que l'utilisateur parle de sécurité, de mise en production, de lancement ou d'audit. Vérifie chaque point dans le code, corrige, puis rend un rapport.
+description: Sécurité pour création d'application. Check-list de 28 contrôles de sécurité (authentification, secrets, base de données, HTTPS, XSS, CSRF, CORS, paiements, dépendances, historique Git, skills/plugins/MCP…) à appliquer à toute application web, mobile ou API créée ou modifiée avec l'IA. Utiliser dès qu'on crée, modifie, relit, déploie ou met en ligne une application, un site avec back-end, une API ou un formulaire, avant d'installer une skill, un plugin ou un serveur MCP, et dès que l'utilisateur parle de sécurité, de mise en production, de lancement ou d'audit. Vérifie chaque point dans le code, corrige, puis rend un rapport.
 license: MIT
 metadata:
-  version: "1.0.0"
-  source: "Reel Instagram @simplif.ia du 13/11/2026, recoupé avec OWASP Top 10 et OWASP ASVS"
+  version: "1.1.0"
+  source: "Reel Instagram @simplif.ia du 13/11/2026, recoupé avec OWASP Top 10, OWASP ASVS et NVIDIA SkillSpector"
 ---
 
 # Sécurité pour création d'application
@@ -15,8 +15,9 @@ L'utilisateur est débutant : explique simplement, en français, sans jargon inu
 ## Quand l'appliquer
 
 - **Création** d'une application : intègre ces protections dès le départ (c'est moins cher que de corriger après).
-- **Modification** : vérifie que le changement ne casse aucun des 27 points qu'il touche.
-- **Avant une mise en ligne** ou sur demande d'**audit** : passe les 27 points en revue complète et rends le rapport.
+- **Modification** : vérifie que le changement ne casse aucun des 28 points qu'il touche.
+- **Avant d'installer une skill, un plugin ou un serveur MCP** (dans Claude, Claude Code ou le projet) : applique le contrôle 26 avant l'installation.
+- **Avant une mise en ligne** ou sur demande d'**audit** : passe les 28 points en revue complète et rends le rapport.
 
 Si un point ne concerne pas le projet (ex. : pas de paiement, pas d'envoi de fichiers), marque-le « Non applicable » avec une phrase d'explication. Ne le saute pas en silence.
 
@@ -28,7 +29,7 @@ Si un point ne concerne pas le projet (ex. : pas de paiement, pas d'envoi de fic
 4. **Ne jamais afficher un secret** (clé, mot de passe, jeton) en clair dans la conversation ou le rapport : masque-le (`sk-...abcd`).
 5. **Tester** les protections quand c'est possible (requête sans connexion sur une route admin, formulaire avec `<script>`, trop de requêtes d'affilée…).
 
-## Les 27 contrôles
+## Les 28 contrôles
 
 ### A. Accès et comptes
 1. **Vraie authentification** : pas de connexion « maison » fragile ; préférer une solution éprouvée (Auth.js, Supabase Auth, Clerk, Firebase Auth, Django/Laravel auth…). Vérifier chaque route protégée côté serveur.
@@ -65,9 +66,17 @@ Si un point ne concerne pas le projet (ex. : pas de paiement, pas d'envoi de fic
 24. **Dépendances vulnérables mises à jour** (`npm audit`, `pip-audit`, `composer audit`, Dependabot…).
 25. **Paquets inutilisés supprimés** (moins de code = moins de failles).
 
-### F. Clôture
-26. **Audit de sécurité complet** : repasser sur les 25 points précédents après les corrections.
-27. **Tester les protections et rendre le rapport** ci-dessous.
+### F. Outils d'IA (skills, plugins, serveurs MCP)
+26. **Skills, plugins et MCP scannés** : un outil d'IA peut exécuter des commandes, lire des fichiers et envoyer des données. Avant de l'installer, et lors de l'audit d'un projet qui en contient (`.claude/`, `skills/`, `.mcp.json`, hooks, `CLAUDE.md`, `AGENTS.md`) :
+    - Scanner avec **NVIDIA SkillSpector** (open source, fonctionne en local, rien n'est envoyé) :
+      `uv tool install git+https://github.com/NVIDIA/skillspector.git` puis `skillspector scan <dossier, fichier SKILL.md, zip ou URL GitHub> --no-llm`.
+    - Alternative sans installation, **uniquement pour un dépôt GitHub public** : https://skill-spector.com (site tiers non officiel ; les scans d'URL publiques peuvent devenir des rapports publics ; ne jamais y envoyer de code privé ni de secrets).
+    - Relire aussi soi-même : commandes `curl … | bash`, téléchargements, lecture de clés ou de `.env`, envois vers des adresses inconnues, consignes qui demandent d'ignorer les règles.
+    - Score élevé = **revue manuelle avant installation**, pas une preuve de malveillance ; score faible = pas une garantie (l'outil produit des faux positifs et ne voit pas tout).
+
+### G. Clôture
+27. **Audit de sécurité complet** : repasser sur les 26 points précédents après les corrections.
+28. **Tester les protections et rendre le rapport** ci-dessous.
 
 ## Modèle de rapport
 
@@ -77,7 +86,7 @@ Rends toujours le rapport sous cette forme, en français simple :
 # Rapport de sécurité — <nom du projet> — <date>
 
 ## En bref
-- Contrôles OK : X / 27
+- Contrôles OK : X / 28
 - Failles corrigées : X
 - À faire par toi : X  (actions que je ne peux pas faire seul, ex. régénérer une clé)
 - Non applicables : X
@@ -97,3 +106,5 @@ Gravité : **Critique** = exploitable tout de suite (secret exposé, route admin
 - OWASP Top 10 : https://owasp.org/www-project-top-ten/
 - OWASP ASVS : https://owasp.org/www-project-application-security-verification-standard/
 - OWASP Cheat Sheets : https://cheatsheetseries.owasp.org/
+- NVIDIA SkillSpector : https://github.com/NVIDIA/SkillSpector
+- Guide NVIDIA « Scan agent skills before installation » : https://docs.nvidia.com/skills/scanning-agent-skills

@@ -3,7 +3,7 @@ name: securite-creation-application
 description: Sécurité pour création d'application. Check-list de 28 contrôles de sécurité (authentification, secrets, base de données, HTTPS, XSS, CSRF, CORS, paiements, dépendances, historique Git, skills/plugins/MCP…) à appliquer à toute application web, mobile ou API créée ou modifiée avec l'IA. Utiliser dès qu'on crée, modifie, relit, déploie ou met en ligne une application, un site avec back-end, une API ou un formulaire, avant d'installer une skill, un plugin ou un serveur MCP, et dès que l'utilisateur parle de sécurité, de mise en production, de lancement ou d'audit. Vérifie chaque point dans le code, corrige, puis rend un rapport.
 license: MIT
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
   source: "Reel Instagram @simplif.ia du 13/11/2026, recoupé avec OWASP Top 10, OWASP ASVS et NVIDIA SkillSpector"
 ---
 
@@ -70,7 +70,8 @@ Si un point ne concerne pas le projet (ex. : pas de paiement, pas d'envoi de fic
 26. **Skills, plugins et MCP scannés** : un outil d'IA peut exécuter des commandes, lire des fichiers et envoyer des données. Avant de l'installer, et lors de l'audit d'un projet qui en contient (`.claude/`, `skills/`, `.mcp.json`, hooks, `CLAUDE.md`, `AGENTS.md`) :
     - Scanner avec **NVIDIA SkillSpector** (open source, fonctionne en local, rien n'est envoyé) :
       `uv tool install git+https://github.com/NVIDIA/skillspector.git` puis `skillspector scan <dossier, fichier SKILL.md, zip ou URL GitHub> --no-llm`.
-    - Alternative sans installation, **uniquement pour un dépôt GitHub public** : https://skill-spector.com (site tiers non officiel ; les scans d'URL publiques peuvent devenir des rapports publics ; ne jamais y envoyer de code privé ni de secrets).
+    - Utiliser **uniquement l'outil officiel NVIDIA**. Ne pas utiliser de sites tiers de scan en ligne (ex. skill-spector.com, non officiel) : le code envoyé peut être publié ou conservé.
+    - Si SkillSpector ne peut pas être installé, le dire à l'utilisateur et faire la relecture manuelle ci-dessous, sans se rabattre sur un site tiers.
     - Relire aussi soi-même : commandes `curl … | bash`, téléchargements, lecture de clés ou de `.env`, envois vers des adresses inconnues, consignes qui demandent d'ignorer les règles.
     - Score élevé = **revue manuelle avant installation**, pas une preuve de malveillance ; score faible = pas une garantie (l'outil produit des faux positifs et ne voit pas tout).
 

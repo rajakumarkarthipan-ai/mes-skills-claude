@@ -1,9 +1,9 @@
 ---
 name: securite-creation-application
-description: Sécurité pour création d'application. Check-list de 28 contrôles de sécurité (authentification, secrets, base de données, HTTPS, XSS, CSRF, CORS, paiements, dépendances, historique Git, skills/plugins/MCP…) à appliquer à toute application web, mobile ou API créée ou modifiée avec l'IA. Utiliser dès qu'on crée, modifie, relit, déploie ou met en ligne une application, un site avec back-end, une API ou un formulaire, avant d'installer une skill, un plugin ou un serveur MCP, et dès que l'utilisateur parle de sécurité, de mise en production, de lancement ou d'audit. Vérifie chaque point dans le code, corrige, puis rend un rapport.
+description: Sécurité pour création d'application. Check-list de 28 contrôles de sécurité (authentification, secrets, base de données, HTTPS, XSS, CSRF, CORS, paiements, dépendances, historique Git, skills/plugins/MCP…) à appliquer à toute application web, mobile ou API créée ou modifiée avec l'IA. Utiliser dès qu'on crée, modifie, relit, déploie ou met en ligne une application, un site avec back-end, une API ou un formulaire, et dès que l'utilisateur parle de sécurité, de mise en production, de lancement ou d'audit. Vérifie chaque point dans le code, corrige, puis rend un rapport.
 license: MIT
 metadata:
-  version: "1.6.0"
+  version: "1.7.0"
   source: "Reel Instagram @simplif.ia du 13/11/2026, recoupé avec OWASP Top 10, OWASP ASVS, NVIDIA SkillSpector, Gitleaks et Semgrep"
 ---
 
@@ -16,7 +16,6 @@ L'utilisateur est débutant : explique simplement, en français, sans jargon inu
 
 - **Création** d'une application : intègre ces protections dès le départ (c'est moins cher que de corriger après).
 - **Modification** : vérifie que le changement ne casse aucun des 28 points qu'il touche.
-- **Avant d'installer une skill, un plugin ou un serveur MCP** (dans Claude, Claude Code ou le projet) : applique le contrôle 26 avant l'installation.
 - **Avant une mise en ligne** ou sur demande d'**audit** : passe les 28 points en revue complète et rends le rapport.
 
 Si un point ne concerne pas le projet (ex. : pas de paiement, pas d'envoi de fichiers), marque-le « Non applicable » avec une phrase d'explication. Ne le saute pas en silence.
@@ -85,13 +84,7 @@ Au début de chaque audit (et après une grosse modification), lancer **Semgrep 
 25. **Paquets inutilisés supprimés** (moins de code = moins de failles).
 
 ### F. Outils d'IA (skills, plugins, serveurs MCP)
-26. **Skills, plugins et MCP scannés** : un outil d'IA peut exécuter des commandes, lire des fichiers et envoyer des données. Avant de l'installer, et lors de l'audit d'un projet qui en contient (`.claude/`, `skills/`, `.mcp.json`, hooks, `CLAUDE.md`, `AGENTS.md`) :
-    - Scanner avec **NVIDIA SkillSpector** (open source, fonctionne en local, rien n'est envoyé) :
-      `uv tool install git+https://github.com/NVIDIA/skillspector.git` puis `skillspector scan <dossier, fichier SKILL.md, zip ou URL GitHub> --no-llm`.
-    - Utiliser **uniquement l'outil officiel NVIDIA**. Ne pas utiliser de sites tiers de scan en ligne (ex. skill-spector.com, non officiel) : le code envoyé peut être publié ou conservé.
-    - Si SkillSpector ne peut pas être installé, le dire à l'utilisateur et faire la relecture manuelle ci-dessous, sans se rabattre sur un site tiers.
-    - Relire aussi soi-même : commandes `curl … | bash`, téléchargements, lecture de clés ou de `.env`, envois vers des adresses inconnues, consignes qui demandent d'ignorer les règles.
-    - Score élevé = **revue manuelle avant installation**, pas une preuve de malveillance ; score faible = pas une garantie (l'outil produit des faux positifs et ne voit pas tout).
+26. **Skills, plugins et MCP du projet vérifiés** : si le projet audité contient des outils d'IA (`.claude/`, `skills/`, `.mcp.json`, hooks, `CLAUDE.md`, `AGENTS.md`), les vérifier en suivant la méthode de la skill **verifier-extension** (scan NVIDIA SkillSpector + relecture des alertes + verdict). Reporter son verdict dans le rapport. L'installation de nouvelles extensions est gérée par verifier-extension, pas par cette skill.
 
 ### G. Clôture
 27. **Audit de sécurité complet** : repasser sur les 26 points précédents après les corrections.
@@ -104,7 +97,7 @@ Au début de chaque audit (et après une grosse modification), lancer **Semgrep 
       - **uniquement sur ses propres applications** : attaquer un site sans autorisation écrite est un délit (art. 323-1 du Code pénal).
     - **Si l'utilisateur refuse, ne veut pas payer, ou si Docker / la clé manquent : ne pas faire l'étape, ne pas insister.** Dans le rapport, l'indiquer « ➖ Non fait (étape bonus optionnelle) ». L'audit reste complet et valide sans elle ; ne pas la compter comme un échec.
     - Si l'utilisateur accepte : tester en priorité une **version locale ou de test**, pas la production (sinon vérifier qu'une sauvegarde récente existe). Installation : `pipx install strix-agent` (éviter `curl … | bash`), puis `strix --target <dossier du projet ou URL de test>`. Résultats dans `strix_runs/`. Ajouter les failles confirmées au rapport avec la mention « confirmée par Strix ».
-    - Avant d'ajouter les skills de Strix à Claude (`npx skills add usestrix/strix`), appliquer le contrôle 26 (scan NVIDIA SkillSpector).
+    - Avant d'ajouter les skills de Strix à Claude (`npx skills add usestrix/strix`), utiliser la skill verifier-extension.
 
 ## Modèle de rapport
 
